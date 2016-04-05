@@ -24,3 +24,5 @@ data_block* get_block(data_graph*, int, int);
 void make_extra(data_block*, data_block*, data_block*);
 
 void make_extras(data_graph*);
+
+int try_recover(data_graph*, int, int);
