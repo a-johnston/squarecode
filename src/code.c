@@ -93,9 +93,4 @@ int try_recover(data_graph *graph, int x, int y) {
 }
 
 int main(void) {
-    //data_graph *graph = make_graph(10, 10);
-
-    //free_graph(graph);
-
-    printf("%d %d", mod(-5, 4), mod(10, 4));
 }
