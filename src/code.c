@@ -59,7 +59,36 @@ void make_extras(data_graph *graph) {
     }
 }
 
+/*
+ * Performs a 1-step recovery of the data symbols of a block. Requires that the
+ * other contributing block to one of this block's direct neighbors has known
+ * data. If so, data is recovered and placed into the graph, else the node is
+ * left alone.
+ *
+ * Iteratively finding lost nodes that have these preconditions satisfied
+ * should result in data recovery, but more advanced relationships can be used
+ * to better exploit the graph structure.
+ */
 int try_recover(data_graph *graph, int x, int y) {
+    data_block *r = get_block(graph, x, y);
+
+    data_block *a, *b, *c, *d;
+
+    a = get_block(graph, x - 1, y);
+    b = get_block(graph, x, y - 1);
+
+    c = get_block(graph, x - 1, y + 1); // other dep for a->extra
+    d = get_block(graph, x + 1, y - 1); // other dep for b->extra
+
+    if (a->extra != -1 && c->data != -1) {
+        r->data = a->extra ^ c->data;
+        return 1;
+    }
+
+    if (b->extra != -1 && d->data != -1) {
+        r->data = b->extra ^ d->data;
+    }
+
     return 0;
 }
 
