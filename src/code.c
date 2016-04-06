@@ -91,6 +91,3 @@ int try_recover(data_graph *graph, int x, int y) {
 
     return 0;
 }
-
-int main(void) {
-}
