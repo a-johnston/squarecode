@@ -72,6 +72,10 @@ void make_extras(data_graph *graph) {
 int try_recover(data_graph *graph, int x, int y) {
     data_block *r = get_block(graph, x, y);
 
+    if (r->data != -1) {
+        return 0;
+    }
+
     data_block *a, *b, *c, *d;
 
     a = get_block(graph, x - 1, y);
@@ -90,4 +94,33 @@ int try_recover(data_graph *graph, int x, int y) {
     }
 
     return 0;
+}
+
+int iterative_recover(data_graph *graph) {
+    int broken  = 0;
+    int changed = 1;
+
+    for (int i = 0; i < graph->width * graph->height; i++) {
+        if (graph->code[i].data == -1) {
+            broken++;
+        }
+    }
+
+    while (broken > 0) {
+        if (!changed) {
+            return 0;
+        }
+        changed = 0;
+
+        for (int x = 0; x < graph->width; x++) {
+            for (int y = 0; y < graph->height; y++) {
+                if (try_recover(graph, x, y)) {
+                    broken--;
+                    changed = 1;
+                }
+            }
+        }
+    }
+
+    return 1;
 }
